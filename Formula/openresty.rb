@@ -12,6 +12,7 @@ class Openresty < Formula
   option "with-slice", "Compile with ngx_http_slice_module"
 
   depends_on "fsyyft/fsyyft/openresty-openssl"
+  depends_on "fsyyft/fsyyft/vts-nginx-module"
   depends_on "geoip"
   depends_on "pcre"
   depends_on "postgresql" => :optional
@@ -27,6 +28,8 @@ class Openresty < Formula
     cc_opt += " -I#{Formula["fsyyft/fsyyft/openresty-openssl"].opt_include}"
     ld_opt = "-L#{HOMEBREW_PREFIX}/lib -L#{Formula["pcre"].opt_lib}"
     ld_opt += " -L#{Formula["fsyyft/fsyyft/openresty-openssl"].opt_lib}"
+    
+    am = "--add-module=#{HOMEBREW_PREFIX}/opt/vts-nginx-module/share/vts-nginx-module"
 
     args = ["-j#{ENV.make_jobs}",
             "--prefix=#{prefix}",
@@ -63,7 +66,9 @@ class Openresty < Formula
             "--with-http_mp4_module",
             "--with-http_gunzip_module",
             "--with-threads",
-            "--with-luajit-xcflags=-DLUAJIT_NUMMODE=2 -DLUAJIT_ENABLE_LUA52COMPAT -fno-stack-check"]
+            "--with-luajit-xcflags=-DLUAJIT_NUMMODE=2 -DLUAJIT_ENABLE_LUA52COMPAT -fno-stack-check",
+            "#{am}"
+    ]
 
     args << "--with-http_postgres_module" if build.with? "postgresql"
     args << "--with-http_iconv_module" if build.with? "iconv"
