@@ -11,7 +11,7 @@ class Openresty < Formula
   option "with-iconv", "Compile with ngx_http_iconv_module"
   option "with-slice", "Compile with ngx_http_slice_module"
 
-  depends_on "denji/nginx/openresty-openssl"
+  depends_on "fsyyft/fsyyft/openresty-openssl"
   depends_on "geoip"
   depends_on "pcre"
   depends_on "postgresql" => :optional
