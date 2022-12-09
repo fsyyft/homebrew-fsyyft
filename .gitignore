@@ -1,3 +1,7 @@
+# 自定义忽略文件。
+
+# 自动生成的忽略文件。
+
 ### Diff template
 *.patch
 *.diff
