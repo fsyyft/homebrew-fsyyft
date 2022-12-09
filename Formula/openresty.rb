@@ -1,9 +1,9 @@
 class Openresty < Formula
   desc "Scalable Web Platform by Extending NGINX with Lua"
   homepage "https://openresty.org"
-  VERSION = "1.15.8.3".freeze
+  VERSION = "1.21.4.1".freeze
   url "https://openresty.org/download/openresty-#{VERSION}.tar.gz"
-  sha256 "b68cf3aa7878db16771c96d9af9887ce11f3e96a1e5e68755637ecaff75134a8"
+  sha256 "0c5093b64f7821e85065c99e5d4e6cc31820cfd7f37b9a0dec84209d87a2af99"
   revision 1
 
   option "with-debug", "Compile with support for debug logging"
@@ -24,9 +24,9 @@ class Openresty < Formula
   def install
     # Configure
     cc_opt = "-I#{HOMEBREW_PREFIX}/include -I#{Formula["pcre"].opt_include}"
-    cc_opt += " -I#{Formula["denji/nginx/openresty-openssl"].opt_include}"
+    cc_opt += " -I#{Formula["fsyyft/fsyyft/openresty-openssl"].opt_include}"
     ld_opt = "-L#{HOMEBREW_PREFIX}/lib -L#{Formula["pcre"].opt_lib}"
-    ld_opt += " -L#{Formula["denji/nginx/openresty-openssl"].opt_lib}"
+    ld_opt += " -L#{Formula["fsyyft/fsyyft/openresty-openssl"].opt_lib}"
 
     args = ["-j#{ENV.make_jobs}",
             "--prefix=#{prefix}",
@@ -63,14 +63,13 @@ class Openresty < Formula
             "--with-http_mp4_module",
             "--with-http_gunzip_module",
             "--with-threads",
-            "--with-luajit-xcflags=-DLUAJIT_NUMMODE=2 -DLUAJIT_ENABLE_LUA52COMPAT -fno-stack-check",
-            "--with-dtrace-probes"]
+            "--with-luajit-xcflags=-DLUAJIT_NUMMODE=2 -DLUAJIT_ENABLE_LUA52COMPAT -fno-stack-check"]
 
     args << "--with-http_postgres_module" if build.with? "postgresql"
     args << "--with-http_iconv_module" if build.with? "iconv"
     args << "--with-http_slice_module" if build.with? "slice"
     args << "--with-debug" if build.with? "debug"
-
+    
     system "./configure", *args
 
     # Install
