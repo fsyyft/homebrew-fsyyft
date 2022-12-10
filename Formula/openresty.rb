@@ -11,6 +11,7 @@ class Openresty < Formula
   option "with-iconv", "Compile with ngx_http_iconv_module"
   option "with-slice", "Compile with ngx_http_slice_module"
 
+  # 使用 openresty-openssl 替换 openssl 的原因：https://github.com/denji/homebrew-nginx/pull/244。
   depends_on "fsyyft/fsyyft/openresty-openssl"
   depends_on "fsyyft/fsyyft/vts-nginx-module"
   depends_on "geoip"

@@ -54,6 +54,7 @@ class OpenrestyOpenssl < Formula
     # Whilst our env points to opt_bin, by default OpenSSL resolves the symlink.
     ENV["PERL"] = Formula["perl"].opt_bin/"perl" if which("perl") == Formula["perl"].opt_bin/"perl"
 
+    # 在 Ubuntu 下无法编译通过，可能是下面的原因，提问：https://github.com/denji/homebrew-nginx/issues/417。
     # x86_64
     arch_args = if Hardware::CPU.is_64_bit? # Hardware::CPU.arch_64_bit?
       %w[darwin64-x86_64-cc enable-ec_nistp_64_gcc_128]
