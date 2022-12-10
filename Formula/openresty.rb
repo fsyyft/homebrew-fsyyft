@@ -12,7 +12,8 @@ class Openresty < Formula
   option "with-slice", "Compile with ngx_http_slice_module"
 
   # 使用 openresty-openssl 替换 openssl 的原因：https://github.com/denji/homebrew-nginx/pull/244。
-  depends_on "fsyyft/fsyyft/openresty-openssl"
+  # 在 Ubuntu 下无法编译通过，调整回使用 openssl@1.1，会失去部分 openssl 的高级特性。
+  depends_on "openssl@1.1"
   depends_on "fsyyft/fsyyft/vts-nginx-module"
   depends_on "geoip"
   depends_on "pcre"
@@ -26,9 +27,9 @@ class Openresty < Formula
   def install
     # Configure
     cc_opt = "-I#{HOMEBREW_PREFIX}/include -I#{Formula["pcre"].opt_include}"
-    cc_opt += " -I#{Formula["fsyyft/fsyyft/openresty-openssl"].opt_include}"
+    cc_opt += " -I#{Formula["openssl@1.1"].opt_include}"
     ld_opt = "-L#{HOMEBREW_PREFIX}/lib -L#{Formula["pcre"].opt_lib}"
-    ld_opt += " -L#{Formula["fsyyft/fsyyft/openresty-openssl"].opt_lib}"
+    ld_opt += " -L#{Formula["openssl@1.1"].opt_lib}"
     
     am = "--add-module=#{HOMEBREW_PREFIX}/opt/vts-nginx-module/share/vts-nginx-module"
 
