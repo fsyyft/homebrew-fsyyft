@@ -11,6 +11,12 @@ class Openresty < Formula
   option "with-iconv", "Compile with ngx_http_iconv_module"
   option "with-slice", "Compile with ngx_http_slice_module"
 
+  patch do
+    url "https://raw.githubusercontent.com/fsyyft/homebrew-fsyyft/a79171e84e83bfd95ee55f69b31214bf4036eced/patches/nginx_upstream_check_1.20.1%2B.patch"
+    sha256 "ea9dab1d33fe4e3aee99ff15a2d4cc902408c5b5f752ad90090581d1b16a60f7"
+  end
+  
+
   # 使用 openresty-openssl 替换 openssl 的原因：https://github.com/denji/homebrew-nginx/pull/244。
   # 在 Ubuntu 下无法编译通过，调整回使用 openssl@1.1，会失去部分 openssl 的高级特性。
   on_linux do
@@ -20,6 +26,7 @@ class Openresty < Formula
     depends_on "fsyyft/fsyyft/openresty-openssl"
   end
   depends_on "fsyyft/fsyyft/vts-nginx-module"
+  depends_on "fsyyft/fsyyft/upstream-check-nginx-module"
   depends_on "geoip"
   depends_on "pcre"
   depends_on "postgresql" => :optional
@@ -43,8 +50,6 @@ class Openresty < Formula
       cc_opt += " -I#{Formula["fsyyft/fsyyft/openresty-openssl"].opt_include}"
       ld_opt += " -L#{Formula["fsyyft/fsyyft/openresty-openssl"].opt_lib}"
     end
-    
-    am = "--add-module=#{HOMEBREW_PREFIX}/opt/vts-nginx-module/share/vts-nginx-module"
 
     args = ["-j#{ENV.make_jobs}",
             "--prefix=#{prefix}",
@@ -82,7 +87,8 @@ class Openresty < Formula
             "--with-http_gunzip_module",
             "--with-threads",
             "--with-luajit-xcflags=-DLUAJIT_NUMMODE=2 -DLUAJIT_ENABLE_LUA52COMPAT -fno-stack-check",
-            "#{am}"
+            "--add-module=#{HOMEBREW_PREFIX}/opt/vts-nginx-module/share/vts-nginx-module",
+            "--add-module=#{HOMEBREW_PREFIX}/opt/upstream-check-nginx-module/share/upstream-check-nginx-module"
     ]
 
     args << "--with-http_postgres_module" if build.with? "postgresql"
